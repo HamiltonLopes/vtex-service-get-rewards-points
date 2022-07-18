@@ -1,0 +1,11 @@
+{
+    "show-points-service":{
+        "input":{
+            "profile":["id"]
+        },
+        "output":{
+            "profile":["points"],
+            "public": ["isLoggedIn"]
+        }
+    }
+}
