@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "title": "Service Example",
   "description": "Getting user points from rewards api",
-  "mustUpdateAt": "2018-01-04",
+  "mustUpdateAt": "2023-01-04",
   "categories": [],
   "dependencies": {},
   "builders": {
@@ -22,6 +22,13 @@
       "attrs": {
         "host": "httpstat.us",
         "path": "*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "rewardsapi.tk",
+        "path": "/*"
       }
     },
     {

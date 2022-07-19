@@ -1,8 +1,11 @@
 import type { ClientsConfig, ServiceContext, RecorderState } from '@vtex/api'
-import { LRUCache, Service } from '@vtex/api'
+//import { method } from '@vtex/api'
+import {  LRUCache, Service } from '@vtex/api'
 
 import { Clients } from './clients'
-import { handler } from './middlewares/session'
+import { getClientPoints } from './middlewares/session'
+//import { handler } from './middlewares/status'
+
 
 const TIMEOUT_MS = 800
 
@@ -10,7 +13,7 @@ const TIMEOUT_MS = 800
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
 const memoryCache = new LRUCache<string, any>({ max: 5000 })
 
-metrics.trackCache('status', memoryCache)
+metrics.trackCache('points', memoryCache)
 
 // This is the configuration for clients available in `ctx.clients`.
 const clients: ClientsConfig<Clients> = {
@@ -44,6 +47,7 @@ export default new Service({
   clients,
   routes: {
     // `status` is the route ID from service.json. It maps to an array of middlewares (or a single handler).
-    sessionHandler: handler,
+    statusHandler: [getClientPoints],
+    getClientPoints: [getClientPoints]
   },
 })

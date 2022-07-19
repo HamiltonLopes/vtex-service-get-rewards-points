@@ -1,38 +1,41 @@
 /* eslint-disable no-console */
 /* eslint-disable prettier/prettier */
-import { json } from 'co-body';
-import axios from 'axios';
 
-export async function handler(ctx: Context) {
-  const { req } = ctx;
+import { json } from "co-body";
 
-  const body: any = await json(req);
+export async function getClientPoints(ctx: Context) {
+  
+  const {
+    clients: { clientPoints },
+    req
+  } = ctx;
 
-  console.log("body ",body);
+  const body = await json(req);
 
-  const clientId = body?.profile?.id;
+  let clientId = body?.profile?.id?.value;
 
-  console.log(clientId);
-
-  let userPoints = null;
-
-  if(clientId){
-    const response = await axios.get(`https://rewardsapi.tk/rewards-api/v1/points/${clientId}`);
-
-    userPoints = await response.data.points;
+  let userPoints : any = null;
+  if(clientId)
+    userPoints = await clientPoints.getPoints(clientId);
+  else if(ctx?.req?.headers["x-colossus-params"]){
+        const reqId : any = ctx.req.headers["x-colossus-params"];
+        clientId = reqId.split("=")[1];
+        userPoints = await clientPoints.getPoints(clientId);
   }
 
-  ctx.status = 200
+  ctx.status = 200;
   ctx.body = {
     profile:{
       points:{
-        value: userPoints
+        value: userPoints?.points
       }
     },
     public:{
       isLoggedIn: {
-        value: !!clientId?.value
+        value: !!clientId
       }
     }
-  }
+  };
 }
+
+

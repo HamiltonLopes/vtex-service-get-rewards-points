@@ -6,7 +6,11 @@
   "maxReplicas": 4,
   "workers": 1,
   "routes": {
-    "sessionHandler": {
+    "getClientPoints":{
+      "path": "/_v/pvt/points/:clientId",
+      "public": true
+    },
+    "statusHandler": {
       "path": "/_v/show-points-service/session/transform",
       "public": true
     }
